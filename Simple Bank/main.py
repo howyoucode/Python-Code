@@ -105,4 +105,4 @@ while True:
     elif choice == 3:
         break
     else:
-        print("Not an option. Choose between 1 to 4.")
+        print("Not an option. Choose between 1 to 3.")
