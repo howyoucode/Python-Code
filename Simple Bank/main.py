@@ -1,4 +1,4 @@
-from passofoop import validate_password
+from password-verification import validate_password
 
 class Account:
     def __init__(self, account, password, deposit):
