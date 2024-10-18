@@ -32,11 +32,11 @@ To run this project, you'll need:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/your-repo-name.git
+   git clone git clone https://github.com/howyougfx/Python-Code.git
    ```
 2. Navigate to the project directory:
    ```bash
-   cd your-repo-name
+   cd Python-Code/Slot\ Machine
    ```
 
 ## Usage
