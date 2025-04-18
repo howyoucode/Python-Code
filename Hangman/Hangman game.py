@@ -64,13 +64,16 @@ random_word = random.choice(fruits)
 length = len(random_word)
 life = 5
 guess = []
-print("Lets Start the game!")
+
+print("🎮 Welcome to the Fruit Guessing Game!")
+print("Guess the fruit by entering one letter at a time.")
+print("You have 5 lives. Let's begin!\n")
 blanks = ["_"] * length
-print(" ".join(blanks))
+print("Word:", " ".join(blanks))
 
 
 while True:
-    user_input = input("Enter the letter: ").lower().strip()
+    user_input = input("\n🔤 Enter a letter: ").lower().strip()
     if len(user_input) == 1:
         if user_input.isalpha():
             if user_input not in guess:
@@ -79,23 +82,27 @@ while True:
                     for idx, char in enumerate(random_word):
                         if char == user_input:
                             blanks[idx] = user_input
-                    print(" ".join(blanks))
+                    print("\n✅ Good guess!")
+                    print("Word:", " ".join(blanks))
                     if "_" not in blanks:
-                        print("You win")
+                        print("\n🎉 Congratulations! You guessed the word.")
                         break
                 else:
-                    print(" ".join(blanks))
-                    print("Wrong")
+                    print("\n❌ Incorrect guess.")
+                    print("Word:", " ".join(blanks))
                     life -= 1
                     if life == 0:
-                        print("You lose.")
+                        print("\n💀 Game Over! You've run out of lives.")
+                        print(f"The correct word was: '{random_word}'.")
                         break
+                    else:
+                        print(f"❤️ Lives left: {life}")
             else:
-                print("You already guessed it.")
-
+                print("⚠️ You already guessed that letter.")
         else:
-            print("Character must be an alphabetic.")
+            print("🚫 Please enter an alphabetic character.")
     else:
-        print("Enter a single character.")
+        print("🚫 Please enter only a single letter.")
+
 
 """
