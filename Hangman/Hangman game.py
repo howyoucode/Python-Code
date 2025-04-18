@@ -63,7 +63,7 @@ fruits = [fruit.lower() for fruit in fruits]
 random_word = random.choice(fruits)
 length = len(random_word)
 life = 5
-
+guess = []
 print("Lets Start the game!")
 blanks = ["_"] * length
 print(" ".join(blanks))
@@ -73,22 +73,26 @@ while True:
     user_input = input("Enter the letter: ").lower().strip()
     if len(user_input) == 1:
         if user_input.isalpha():
-            if user_input in random_word:
-                for idx, char in enumerate(random_word):
-                    if char == user_input:
-                        blanks[idx] = user_input
-                print(" ".join(blanks))
-                if "_" not in blanks:
-                    print("You win")
-                    break
-
+            if user_input not in guess:
+                guess.append(user_input)
+                if user_input in random_word:
+                    for idx, char in enumerate(random_word):
+                        if char == user_input:
+                            blanks[idx] = user_input
+                    print(" ".join(blanks))
+                    if "_" not in blanks:
+                        print("You win")
+                        break
+                else:
+                    print(" ".join(blanks))
+                    print("Wrong")
+                    life -= 1
+                    if life == 0:
+                        print("You lose.")
+                        break
             else:
-                print(" ".join(blanks))
-                print("Wrong")
-                life -= 1
-                if life == 0:
-                    print("You lose.")
-                    break
+                print("You already guessed it.")
+
         else:
             print("Character must be an alphabetic.")
     else:
