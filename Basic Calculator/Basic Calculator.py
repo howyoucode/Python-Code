@@ -41,3 +41,59 @@ try:
 
 except ValueError:
     print("Please enter valid numeric values.")
+
+
+# OR
+
+
+"""
+
+def add (n1, n2):
+    return n1+n2
+
+def subtract (n1, n2):
+    return n1 - n2
+
+def multiply(n1, n2):
+    return n1 * n2
+
+def divide (n1, n2):
+    if n2 != 0:
+        return n1 / n2
+    else:
+        return n1
+
+operators = {
+    "+" : add,
+    "-" : subtract,
+    "*" : multiply,
+    "/" : divide,
+}
+
+user_input = input("What do you want to operate: ")
+
+
+if user_input in operators:
+    n1 = float(input("Enter the value: "))
+    n2 = float(input("Enter second the value: "))
+
+    trigger_function = operators[user_input]
+    
+    while True:
+        n1 = trigger_function(n1, n2)
+        print(n1)
+        if input("Do you want to continue operating on the result? (y/n): ").lower().strip() == "y":
+            while True:
+                user_input = input("What do you want to operate: ")
+                n2 = float(input("Enter second the value: "))
+                if user_input not in operators:
+                    print("Not in options.")
+                else:
+                    break
+        else:
+            break
+
+else:
+    print("Not in options.")
+
+"""
