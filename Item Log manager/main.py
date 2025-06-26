@@ -1,105 +1,101 @@
 data = {
-    "kdadg123": {"Ali": {"super": 45, "Super": 30, "daal": 100, "Papar": 10}},
-    "kdadg124": {"Ahmed": {"super": 50, "Super": 20, "daal": 90, "Papar": 15}},
-    "kdadg125": {"Sara": {"super": 60, "Super": 25, "daal": 80, "Papar": 20}},
-    "kdadg126": {"Ali": {"super": 20, "Super": 15, "daal": 10, "Papar": 5}},
+    "kdadg123": {"Ali": [{"item": "super", "price": 45}, {"item": "Super", "price": 30}, {"item": "daal", "price": 100}, {"item": "Papar", "price": 10}]},
+    "kdadg124": {"Ahmed": [{"item": "super", "price": 50}, {"item": "Super", "price": 20}, {"item": "daal", "price": 90}, {"item": "Papar", "price": 15}]},
+    "kdadg125": {"Sara": [{"item": "super", "price": 60}, {"item": "Super", "price": 25}, {"item": "daal", "price": 80}, {"item": "Papar", "price": 20}]},
+    "kdadg126": {"Ali": [{"item": "super", "price": 20}, {"item": "Super", "price": 15}, {"item": "daal", "price": 10}, {"item": "Papar", "price": 5}]},
 }
 # Shop Borrow Data Management System
+
 
 def enter_data():
     try:
         name = input("Enter customer name: ").capitalize().strip()
-        item = input("Enter item name: ")
+        item = input("Enter item name: ").strip()
         price = float(input("Enter item price: "))
+        return name, item, price
     except ValueError:
-        print("Invalid input. Please enter a valid price.")
-    
-    return name, item, price
+        print("❌ Invalid input. Please enter correct values.")
+        return None, None, None
 
-# Under Develop 
+
 def store_data():
     name, item, price = enter_data()
-    if name in data:
-        data.update([name][{item:price}]) # Error
-    else:
-        data[name] = {item:price}
-
-def details():
-    Total = 0
-    found = False
-    total_person = []
-    name = input("Enter the customer name to search: ").capitalize().strip()
-    for user_id, user_data in data.items():
-
-        # print(person_dict)  # Debug: print person_dict
-        for person_name, items in user_data.items():
-            if person_name.lower() == name.lower():
-                found = True
-                total_person.append(user_id)
-
-    if not found:
-        print("No records found.")
+    if not name or not item:
         return
 
-    if len(total_person) > 1:
-        print("\nMultiple records found for this name:")
-        for user_id in total_person:
-            print("ID:", user_id, "Name:", name)
+    matching_ids = []
+    for user_id, user_data in data.items():
+        if name in user_data:
+            matching_ids.append(user_id)
 
-        while True:
-            option = input("Enter a specific ID to view, type 'all' to view all records, or 'x' to go back: ")
-            if option.lower() == "x":
-                return
-            elif option.lower() == "all":
-                for user_id in total_person:
-                    person = data[user_id]
-
-                    for name, items in person.items():
-                        for item, price in items.items():
-                            print(f"{item} - {price}")
-                            Total += price
-                        print("\n░▒▓█►─═  Total Amount ═─◄█▓▒░:", Total, "\n")
-                        Total = 0
-                
-                return
-
-            elif option in total_person:
-                person = data[option]
-                for name, items in person.items():
-                    for item, price in items.items():
-                        print(f"{item} - {price}")
-                        Total += price
-                    print("\n░▒▓█►─═  Total Amount ═─◄█▓▒░:", Total, "\n")
-                    Total = 0
-                return
-            else:
-                print("Invalid ID. Please try again.")
-                return
-
-    elif len(total_person) == 1:
-        print("\nSingle record found:")
-        print("ID:", user_id, "Name:", name)
-        person = data[total_person[0]]
-
-        for name, items in person.items():
-            for item_name, price in items.items():
-                print(f"{item_name} - {price}")
-                Total += price
-            print("\n░▒▓█►─═  Total Amount ═─◄█▓▒░:", Total, "\n")
-            Total = 0
-
-
-while True:
-    select_option = input("Select an option (1: Add Entry, 2: View Details, x: Exit): ")
-    if select_option == "x":
-        break
-    elif select_option == "1":
-        store_data()
-    elif select_option == "2":
-        details()
-    elif select_option == "3":
-        pass
-    elif select_option == "4":
-        pass
+    if len(matching_ids) > 1:
+        print("⚠ Multiple entries found. Data will be added to the first match.")
+        user_id = matching_ids[0]
+    elif len(matching_ids) == 1:
+        user_id = matching_ids[0]
     else:
-        print("Invalid option selected. Please try again.")
+        user_id = f"kdadg{len(data) + 123}"
+        data[user_id] = {name: []}
+
+    data[user_id][name].append({"item": item, "price": price})
+    print(f"✅ Entry saved for {name} under ID: {user_id}")
+
+
+def details():
+    name = input("Enter customer name to view details: ").capitalize().strip()
+    matching_ids = [uid for uid, record in data.items() if name in record]
+
+    if not matching_ids:
+        print("❌ No records found.")
+        return
+
+    def print_record(uid):
+        person = data[uid]
+        records = person[name]
+        total = 0
+        print(f"\n🧾 Record for ID: {uid}")
+        for entry in records:
+            print(f"- {entry['item']} : {entry['price']}")
+            total += entry["price"]
+        print("🔢 Total:", total, "\n")
+
+    if len(matching_ids) > 1:
+        print("\nMultiple records found:")
+        for uid in matching_ids:
+            print(f"→ {uid}")
+        while True:
+            choice = input("Enter specific ID, 'all' to view all, or 'x' to exit: ").strip().lower()
+            if choice == "x":
+                break
+            elif choice == "all":
+                for uid in matching_ids:
+                    print_record(uid)
+                break
+            elif choice in matching_ids:
+                print_record(choice)
+                break
+            else:
+                print("❌ Invalid input.")
+    else:
+        print_record(matching_ids[0])
+
+
+# -----------------------------
+# Main Menu
+# -----------------------------
+while True:
+    print("\n📋 Shop Borrow Management System")
+    print("1. Add New Entry")
+    print("2. View Customer Details")
+    print("x. Exit")
+    choice = input("Choose an option: ").strip().lower()
+
+    if choice == "1":
+        store_data()
+    elif choice == "2":
+        details()
+    elif choice == "x":
+        print("👋 Exiting. Goodbye!")
+        break
+    else:
+        print("❌ Invalid choice. Please try again.")
